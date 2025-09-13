@@ -2,6 +2,30 @@ import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 
+function checkReactNativeVersion() {
+  const pkgPath = path.join(process.cwd(), "package.json");
+  try {
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+    const rnVersion = pkg.dependencies["react-native"];
+    if (!rnVersion) {
+      console.error("❌ React Native not found in dependencies");
+      process.exit(1);
+    }
+
+    const version = rnVersion.replace(/[^0-9.]/g, "");
+    const major = parseInt(version.split(".")[0]);
+    const minor = parseInt(version.split(".")[1]);
+
+    if (major === 0 && minor < 81) {
+      console.error("❌ This toolkit requires React Native 0.81.0 or higher");
+      process.exit(1);
+    }
+  } catch (err) {
+    console.error("❌ Failed to check React Native version:", err);
+    process.exit(1);
+  }
+}
+
 function addScripts(projectDir) {
   const pkgPath = path.join(projectDir, "package.json");
   let pkg = {};
@@ -260,6 +284,8 @@ export async function setupWebpack() {
   const projectDir = process.cwd();
   console.log(`\n⚡ Setting up Webpack in: ${projectDir}\n`);
 
+  checkReactNativeVersion();
+
   addScripts(projectDir);
 
   installLibraries(projectDir);
@@ -273,7 +299,7 @@ export async function setupWebpack() {
   createPublicHtml(projectDir);
 
   console.log("\n✅ Webpack setup complete.\n");
-  console.log(
-    "Run `npm run web` to start the dev server or `npm run web:build` to build for production.\n"
-  );
+  console.log("Available commands:");
+  console.log("- `npm run web`: Start the dev server");
+  console.log("- `npm run web:build`: Build for production");
 }
