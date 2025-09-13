@@ -1,0 +1,39 @@
+{
+  "name": "react-native-web-toolkit",
+  "version": "1.0.0",
+  "description": "A CLI toolkit to seamlessly add web support to React Native projects using Webpack",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "react-native-web-toolkit": "./bin/index.js"
+  },
+  "keywords": [
+    "react-native",
+    "react-native-web",
+    "webpack",
+    "web",
+    "cross-platform",
+    "toolkit",
+    "cli"
+  ],
+  "author": {
+    "name": "Rishabh Sehgal",
+    "email": "rishabbh004@gmail.com",
+    "url": "https://github.com/sehgalrishabh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sehgalrishabh/react-native-web-toolkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sehgalrishabh/react-native-web-toolkit/issues"
+  },
+  "homepage": "https://github.com/sehgalrishabh/react-native-web-toolkit#readme",
+  "license": "MIT",
+  "dependencies": {
+    "inquirer": "^12.9.4"
+  }
+}
