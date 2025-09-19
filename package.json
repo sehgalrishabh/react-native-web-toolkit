@@ -1,6 +1,6 @@
 {
   "name": "react-native-web-toolkit",
-  "version": "1.0.3",
+  "version": "1.0.6",
   "description": "A CLI toolkit to seamlessly add web support to React Native projects using Webpack",
   "type": "module",
   "scripts": {
@@ -11,6 +11,7 @@
   },
   "files": [
     "bin/",
+    "runtime/",
     "package.json"
   ],
   "keywords": [
