@@ -1,7 +1,7 @@
 import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
-import { checkReactNativeVersion, copyTemplate } from "./utils";
+import { checkReactNativeVersion, copyTemplate } from "./utils.js";
 
 function addScripts(projectDir) {
   const pkgPath = path.join(projectDir, "package.json");

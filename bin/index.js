@@ -16,6 +16,21 @@ const colors = {
   reset: "\x1b[0m", // Reset all colors
 };
 
+function getPackageVersion() {
+  try {
+    // Get the directory of the current module
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+
+    // Read package.json from the parent directory (since this is in bin/)
+    const packagePath = path.join(__dirname, "..", "package.json");
+    const packageData = JSON.parse(fs.readFileSync(packagePath, "utf8"));
+    return packageData.version;
+  } catch (error) {
+    return "unknown";
+  }
+}
+
 function createInterface() {
   const rl = readline.createInterface({
     input: process.stdin,
@@ -77,7 +92,7 @@ function prompt(message, choices) {
 async function run() {
   const rl = createInterface();
 
-  console.log("🚀 React Native Web Toolkit");
+  console.log(`🚀 React Native Web Toolkit - ${getPackageVersion()}`);
   try {
     const choices = [
       { name: "Setup Webpack in existing project", value: "webpack" },
