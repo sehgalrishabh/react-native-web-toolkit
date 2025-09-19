@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import readline from "readline";
 import { setupWebpack } from "./setupWebpack.js";
-import { setupLibrary } from "./setupLibrary.js";
 
 const colors = {
   // Primary action color - for interactive elements
@@ -82,15 +81,12 @@ async function run() {
   try {
     const choices = [
       { name: "Setup Webpack in existing project", value: "webpack" },
-      { name: "Setup using bundled library", value: "library" },
     ];
 
     const choice = await prompt("Choose setup option:", choices);
 
     if (choice === "webpack") {
       await setupWebpack();
-    } else {
-      await setupLibrary();
     }
   } catch (error) {
     console.error("Error:", error);
