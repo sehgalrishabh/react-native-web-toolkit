@@ -1,30 +1,7 @@
 import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
-
-function checkReactNativeVersion() {
-  const pkgPath = path.join(process.cwd(), "package.json");
-  try {
-    const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
-    const rnVersion = pkg.dependencies["react-native"];
-    if (!rnVersion) {
-      console.error("❌ React Native not found in dependencies");
-      process.exit(1);
-    }
-
-    const version = rnVersion.replace(/[^0-9.]/g, "");
-    const major = parseInt(version.split(".")[0]);
-    const minor = parseInt(version.split(".")[1]);
-
-    if (major === 0 && minor < 81) {
-      console.error("❌ This toolkit requires React Native 0.81.0 or higher");
-      process.exit(1);
-    }
-  } catch (err) {
-    console.error("❌ Failed to check React Native version:", err);
-    process.exit(1);
-  }
-}
+import { checkReactNativeVersion, copyTemplate } from "./utils";
 
 function addScripts(projectDir) {
   const pkgPath = path.join(projectDir, "package.json");
@@ -108,74 +85,9 @@ function installLibraries(projectDir) {
   }
 }
 
-function createWebpack() {
+function createWebpack(projectDir) {
   // create webpack config
-  fs.writeFileSync(
-    "webpack.config.js",
-    `
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const appDirectory = path.resolve(__dirname);
-const babelConfig = require(\`\${appDirectory}/babel.config\`);
-
-const BabelLoader = {
-  test: /\.(js|jsx|ts|tsx)$/,
-  exclude: {
-    and: [
-      // babel will exclude these from transpling
-      path.resolve(appDirectory, 'node_modules'),
-      path.resolve(appDirectory, 'ios'),
-      path.resolve(appDirectory, 'android'),
-    ],
-    // whitelisted modules to be transpiled by babel
-    not: [],
-  },
-  include: [
-    path.resolve(appDirectory, 'index.web.js'),
-    path.resolve(appDirectory, 'src'),
-    path.resolve(appDirectory, 'App.tsx'),
-  ],
-  use: {
-    loader: 'babel-loader',
-    options: {
-      presets: babelConfig.presets,
-      plugins: babelConfig.plugins,
-    },
-  },
-};
-
-const AssetsLoader = { test: /.(png|jpe?g|gif|svg)$/, type: 'asset/resource' };
-
-const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-  template: path.resolve(appDirectory, './public/index.html'),
-});
-
-module.exports = {
-  entry: path.resolve(__dirname, 'index.web.js'),
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[id].bundle.js',
-    asyncChunks: true,
-  },
-  resolve: {
-    extensions: [
-      '.web.ts',
-      '.web.tsx',
-      '.web.js',
-      '.web.jsx',
-      '.ts',
-      '.tsx',
-      '.js',
-      '.jsx',
-      '.json',
-    ],
-    alias: { 'react-native$': 'react-native-web' },
-  },
-  module: { rules: [BabelLoader, AssetsLoader] },
-  plugins: [HtmlWebpackPluginConfig],
-};
-`
-  );
+  copyTemplate("webpack.config.js", projectDir);
 }
 
 function createBabelConfig(projectDir) {
@@ -290,7 +202,7 @@ export async function setupWebpack() {
 
   installLibraries(projectDir);
 
-  createWebpack();
+  createWebpack(projectDir);
 
   createBabelConfig(projectDir);
 

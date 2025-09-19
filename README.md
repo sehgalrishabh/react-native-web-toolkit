@@ -7,9 +7,8 @@ A CLI toolkit to seamlessly add web support to React Native projects using Webpa
 - Easy setup of React Native Web in existing React Native projects
 - Automated Webpack configuration
 - Support for both development and production builds
-- Two setup options:
+- Single setup option:
   - Webpack configuration for custom control
-  - Bundled library for quick setup
 
 ## Prerequisites
 
